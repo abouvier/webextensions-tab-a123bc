@@ -84,7 +84,7 @@ browser.tabs.onUpdated.addListener((updatedId, changeInfo, updatedTab) => {
 });
 
 browser.tabs.onCreated.addListener(async newTab => {
-	let anchors = getAnchors(newTab).slice();
+	const anchors = getAnchors(newTab).slice();
 	addAnchor(newTab);
 
 	if (await isKnown(newTab)) {
@@ -108,7 +108,7 @@ browser.tabs.onCreated.addListener(async newTab => {
 
 	let newIndex = anchorTab.index;
 	if (anchorTab.pinned) {
-		let pinnedTabs = await browser.tabs.query({
+		const pinnedTabs = await browser.tabs.query({
 			windowId: anchorTab.windowId,
 			pinned: true
 		});
