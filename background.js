@@ -34,7 +34,7 @@ function makeAnchor(tab) {
 }
 
 function addAnchor(tab) {
-	getAnchors(tab).unshift(tab.id);
+	getAnchors(tab).push(tab.id);
 }
 
 function removeAnchor(tab) {
@@ -112,17 +112,17 @@ browser.tabs.onCreated.addListener(async newTab => {
 		return;
 	}
 
-	let newIndex = anchorTab.index;
+	let newIndex = anchors.length;
 	if (anchorTab.pinned) {
 		const pinnedTabs = await browser.tabs.query({
 			windowId: anchorTab.windowId,
 			pinned: true
 		});
 		if (pinnedTabs.length) {
-			newIndex = pinnedTabs.length;
+			newIndex += pinnedTabs.length - 1;
 		}
-	} else if (newTab.index > anchorTab.index) {
-		newIndex++;
+	} else {
+		newIndex += anchorTab.index;
 	}
 	if (newIndex != newTab.index) {
 		browser.tabs.move(newTab.id, {
