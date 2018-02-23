@@ -83,6 +83,12 @@ browser.tabs.onUpdated.addListener((updatedId, changeInfo, updatedTab) => {
 	}
 });
 
+browser.tabs.onAttached.addListener(attachedId => {
+	makeKnown({
+		id: attachedId
+	});
+});
+
 browser.tabs.onCreated.addListener(async newTab => {
 	const anchors = getAnchors(newTab).slice();
 	addAnchor(newTab);
