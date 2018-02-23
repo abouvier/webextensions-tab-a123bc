@@ -13,7 +13,7 @@
 // limitations under the License.
 
 var windowAnchors = new Map();
-var hasRemoved = false;
+var messyWindows = new Set();
 
 function getAnchors(tab) {
 	return windowAnchors.get(tab.windowId) ||
@@ -24,8 +24,9 @@ function setAnchors(tab, anchors) {
 	return windowAnchors.set(tab.windowId, anchors);
 }
 
-function deleteAnchors(tab) {
+function removeWindow(tab) {
 	windowAnchors.delete(tab.windowId);
+	messyWindows.delete(tab.windowId);
 }
 
 function makeAnchor(tab) {
@@ -48,15 +49,23 @@ function isKnown(tab) {
 	return browser.sessions.getTabValue(tab.id, "known");
 }
 
+function hasRemoved(tab) {
+	return messyWindows.has(tab.windowId);
+}
+
+function setMessy(tab) {
+	return messyWindows.add(tab.windowId);
+}
+
 browser.tabs.onActivated.addListener(makeAnchor);
 
 browser.tabs.onRemoved.addListener((closedId, removeInfo) => {
-	if (!hasRemoved) {
-		hasRemoved = true;
-	}
 	if (removeInfo.isWindowClosing) {
-		deleteAnchors(removeInfo);
+		removeWindow(removeInfo);
 		return;
+	}
+	if (!hasRemoved(removeInfo)) {
+		setMessy(removeInfo);
 	}
 	removeAnchor({
 		windowId: removeInfo.windowId,
@@ -79,7 +88,7 @@ browser.tabs.onCreated.addListener(async newTab => {
 	addAnchor(newTab);
 
 	if (await isKnown(newTab)) {
-		if (!hasRemoved) {
+		if (!hasRemoved(newTab) && !newTab.active) {
 			removeAnchor(newTab);
 		}
 		return;
