@@ -42,7 +42,7 @@ function removeAnchor(tab) {
 }
 
 function makeKnown(tab) {
-	return browser.sessions.setTabValue(tab.id, "known", true);
+	return browser.sessions.setTabValue(tab.id || tab, "known", true);
 }
 
 function isKnown(tab) {
@@ -55,6 +55,23 @@ function hasRemoved(tab) {
 
 function setMessy(tab) {
 	return messyWindows.add(tab.windowId);
+}
+
+function moveTab(tab, index) {
+	return browser.tabs.move(tab.id, {
+		index: index
+	});
+}
+
+function getPinnedTabs(tab) {
+	return browser.tabs.query({
+		windowId: tab.windowId,
+		pinned: true
+	});
+}
+
+function getAllTabs() {
+	return browser.tabs.query({});
 }
 
 browser.tabs.onActivated.addListener(makeAnchor);
@@ -83,11 +100,7 @@ browser.tabs.onUpdated.addListener((updatedId, changeInfo, updatedTab) => {
 	}
 });
 
-browser.tabs.onAttached.addListener(attachedId => {
-	makeKnown({
-		id: attachedId
-	});
-});
+browser.tabs.onAttached.addListener(makeKnown);
 
 browser.tabs.onCreated.addListener(async newTab => {
 	const anchors = getAnchors(newTab).slice();
@@ -114,10 +127,7 @@ browser.tabs.onCreated.addListener(async newTab => {
 
 	let newIndex = anchors.length;
 	if (anchorTab.pinned) {
-		const pinnedTabs = await browser.tabs.query({
-			windowId: anchorTab.windowId,
-			pinned: true
-		});
+		const pinnedTabs = await getPinnedTabs(anchorTab);
 		if (pinnedTabs.length) {
 			newIndex += pinnedTabs.length - 1;
 		}
@@ -125,13 +135,11 @@ browser.tabs.onCreated.addListener(async newTab => {
 		newIndex += anchorTab.index;
 	}
 	if (newIndex != newTab.index) {
-		browser.tabs.move(newTab.id, {
-			index: newIndex
-		});
+		moveTab(newTab, newIndex);
 	}
 });
 
-browser.tabs.query({}).then(tabs => {
+getAllTabs().then(tabs => {
 	tabs.forEach(tab => {
 		makeKnown(tab);
 		if (tab.active) {
