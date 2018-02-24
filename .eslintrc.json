@@ -1,0 +1,32 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true,
+		"webextensions": true
+	},
+	"extends": "eslint:recommended",
+	"parserOptions": {
+		"ecmaVersion": 8
+	},
+	"rules": {
+		"indent": [
+			"warn",
+			"tab"
+		],
+		"linebreak-style": [
+			"warn",
+			"unix"
+		],
+		"quotes": [
+			"warn",
+			"double"
+		],
+		"semi": [
+			"error",
+			"always"
+		],
+		"no-console": [
+			"off"
+		]
+	}
+}
