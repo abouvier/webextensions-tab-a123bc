@@ -76,6 +76,10 @@ function getAllTabs() {
 	return browser.tabs.query({});
 }
 
+function getTab(id) {
+	return browser.tabs.get(id);
+}
+
 browser.tabs.onActivated.addListener(makeAnchor);
 
 browser.tabs.onRemoved.addListener((closedId, removeInfo) => {
@@ -117,7 +121,7 @@ browser.tabs.onCreated.addListener(async newTab => {
 	makeKnown(newTab);
 
 	for (const anchorId of anchors) {
-		var anchorTab = await browser.tabs.get(anchorId);
+		var anchorTab = await getTab(anchorId);
 		if (anchorTab) {
 			break;
 		}
