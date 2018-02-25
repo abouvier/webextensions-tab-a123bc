@@ -82,6 +82,13 @@ function getTab(id) {
 
 browser.tabs.onActivated.addListener(makeAnchor);
 
+browser.tabs.onMoved.addListener(async movedId => {
+	let movedTab = await getTab(movedId);
+	if (movedTab.active) {
+		makeAnchor(movedTab);
+	}
+});
+
 browser.tabs.onRemoved.addListener((closedId, removeInfo) => {
 	if (removeInfo.isWindowClosing) {
 		removeWindow(removeInfo);
