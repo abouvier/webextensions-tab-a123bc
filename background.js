@@ -106,6 +106,8 @@ browser.tabs.onUpdated.addListener((updatedId, changeInfo, updatedTab) => {
 	}
 });
 
+browser.tabs.onDetached.addListener(makeKnown);
+
 browser.tabs.onAttached.addListener(makeKnown);
 
 browser.tabs.onCreated.addListener(async newTab => {
