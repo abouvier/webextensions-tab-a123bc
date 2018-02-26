@@ -3,6 +3,6 @@
 		"message": "Onglet [a]123bc"
 	},
 	"extensionDescription": {
-		"message": "Ouvre tout nouvel onglet à la suite du dernier onglet ouvert ou activé."
+		"message": "Ouvre tout nouvel onglet à la suite du dernier onglet ouvert, activé ou déplacé."
 	}
 }

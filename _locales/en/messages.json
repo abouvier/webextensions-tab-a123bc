@@ -3,6 +3,6 @@
 		"message": "Tab [a]123bc"
 	},
 	"extensionDescription": {
-		"message": "Opens every new tab after the last opened or activated tab."
+		"message": "Opens every new tab after the last opened, activated or moved tab."
 	}
 }
