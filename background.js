@@ -148,6 +148,9 @@ browser.tabs.onCreated.addListener(async newTab => {
 		}
 	} else {
 		newIndex += anchorTab.index;
+		if (newTab.index < anchorTab.index) {
+			newIndex--;
+		}
 	}
 	if (newIndex != newTab.index) {
 		moveTab(newTab, newIndex);
