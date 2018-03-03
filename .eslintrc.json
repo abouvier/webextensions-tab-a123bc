@@ -1,4 +1,8 @@
 {
+	"globals": {
+		"Tab": false,
+		"Windows": false
+	},
 	"env": {
 		"browser": true,
 		"es6": true,
