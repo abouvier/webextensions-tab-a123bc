@@ -81,26 +81,17 @@ brother.Tab.onCreated(async newTab => {
 	}
 	makeKnown(newTab);
 
-	for (const anchorId of anchors) {
-		var anchorTab = await brother.Tab.get(anchorId);
-		if (anchorTab) {
-			break;
-		}
-	}
-
-	if (!anchorTab) {
-		return;
-	}
+	const activeTab = await brother.Tab.get(anchors[0]);
 
 	let newIndex = anchors.length;
-	if (anchorTab.pinned) {
+	if (activeTab.pinned) {
 		const pinnedTabs = await currentWindow.pinnedTabs;
 		if (pinnedTabs.length) {
 			newIndex += pinnedTabs.length - 1;
 		}
 	} else {
-		newIndex += anchorTab.index;
-		if (newTab.index < anchorTab.index) {
+		newIndex += activeTab.index;
+		if (newTab.index < activeTab.index) {
 			newIndex--;
 		}
 	}
