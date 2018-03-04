@@ -11,9 +11,9 @@
 	},
 	"background": {
 		"scripts": [
-			"src/Tab.js",
-			"src/Window.js",
-			"src/main.js"
+			"lib/Tab.js",
+			"lib/Window.js",
+			"scripts/background.js"
 		]
 	},
 	"permissions": [

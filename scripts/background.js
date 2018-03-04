@@ -21,7 +21,7 @@ function getWindow(tab) {
 }
 
 function setWindow(tab) {
-	return windows.set(tab.windowId, new Window(tab));
+	return windows.set(tab.windowId, new brother.Window(tab));
 }
 
 function deleteWindow(tab) {
@@ -36,15 +36,15 @@ function makeKnown(tab) {
 	tab.known = true;
 }
 
-Tab.onActivated(makeAnchor);
+brother.Tab.onActivated(makeAnchor);
 
-Tab.onMoved(movedTab => {
+brother.Tab.onMoved(movedTab => {
 	if (movedTab.active) {
 		makeAnchor(movedTab);
 	}
 });
 
-Tab.onRemoved((closedTab, removeInfo) => {
+brother.Tab.onRemoved((closedTab, removeInfo) => {
 	if (removeInfo.isWindowClosing) {
 		deleteWindow(removeInfo);
 		return;
@@ -54,7 +54,7 @@ Tab.onRemoved((closedTab, removeInfo) => {
 	currentWindow.hasRemoved = true;
 });
 
-Tab.onUpdated((updatedId, changeInfo, updatedTab) => {
+brother.Tab.onUpdated((updatedId, changeInfo, updatedTab) => {
 	if (changeInfo.pinned) {
 		if (updatedTab.active) {
 			makeAnchor(updatedTab);
@@ -64,11 +64,11 @@ Tab.onUpdated((updatedId, changeInfo, updatedTab) => {
 	}
 });
 
-Tab.onDetached(makeKnown);
+brother.Tab.onDetached(makeKnown);
 
-Tab.onAttached(makeKnown);
+brother.Tab.onAttached(makeKnown);
 
-Tab.onCreated(async newTab => {
+brother.Tab.onCreated(async newTab => {
 	const currentWindow = getWindow(newTab);
 	const anchors = currentWindow.anchors.slice();
 	currentWindow.addAnchor(newTab);
@@ -82,7 +82,7 @@ Tab.onCreated(async newTab => {
 	makeKnown(newTab);
 
 	for (const anchorId of anchors) {
-		var anchorTab = await Tab.get(anchorId);
+		var anchorTab = await brother.Tab.get(anchorId);
 		if (anchorTab) {
 			break;
 		}
@@ -109,7 +109,7 @@ Tab.onCreated(async newTab => {
 	}
 });
 
-Tab.getAll().then(tabs => {
+brother.Tab.getAll().then(tabs => {
 	tabs.forEach(tab => {
 		makeKnown(tab);
 		if (tab.active) {

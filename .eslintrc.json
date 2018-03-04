@@ -1,7 +1,6 @@
 {
 	"globals": {
-		"Tab": false,
-		"Windows": false
+		"brother": false
 	},
 	"env": {
 		"browser": true,
