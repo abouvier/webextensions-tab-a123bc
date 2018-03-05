@@ -11,13 +11,20 @@
 	},
 	"background": {
 		"scripts": [
+			"lib/Storage.js",
 			"lib/Tab.js",
 			"lib/Window.js",
+			"scripts/default.js",
 			"scripts/background.js"
 		]
 	},
+	"options_ui": {
+		"page": "pages/options.html",
+		"browser_style": true
+	},
 	"permissions": [
-		"sessions"
+		"sessions",
+		"storage"
 	],
 	"applications": {
 		"gecko": {

@@ -56,7 +56,7 @@ brother.Tab.onRemoved((closedTab, removeInfo) => {
 });
 
 brother.Tab.onUpdated((updatedId, changeInfo, updatedTab) => {
-	if (changeInfo.pinned) {
+	if ("pinned" in changeInfo) {
 		if (updatedTab.active) {
 			makeAnchor(updatedTab);
 		} else {
@@ -73,7 +73,6 @@ brother.Tab.onCreated(async newTab => {
 	const currentWindow = getWindow(newTab);
 	const anchors = currentWindow.anchors.slice();
 	currentWindow.addAnchor(newTab);
-
 	if (await newTab.known) {
 		if (!currentWindow.hasRemoved && !newTab.active) {
 			currentWindow.removeAnchor(newTab);
@@ -81,20 +80,24 @@ brother.Tab.onCreated(async newTab => {
 		return;
 	}
 	makeKnown(newTab);
-
+	if (!anchors.length) {
+		return;
+	}
 	const activeTab = await brother.Tab.get(anchors[0]);
-
-	let newIndex = anchors.length;
+	let newIndex = activeTab.index + anchors.length;
 	if (activeTab.pinned) {
-		const pinnedTabs = await currentWindow.pinnedTabs;
-		if (pinnedTabs.length) {
-			newIndex += pinnedTabs.length - 1;
+		if (options.pinFromPinned) {
+			await newTab.pin();
+			if (!newTab.active) {
+				currentWindow.addAnchor(newTab);
+			}
+		} else {
+			const pinnedTabs = await currentWindow.pinnedTabs;
+			newIndex = pinnedTabs.length + anchors.length - 1;
 		}
-	} else {
-		newIndex += activeTab.index;
-		if (newTab.index < activeTab.index) {
-			newIndex--;
-		}
+	}
+	if (newTab.index < activeTab.index) {
+		newIndex--;
 	}
 	if (newIndex != newTab.index) {
 		newTab.move(newIndex);
@@ -108,4 +111,12 @@ brother.Tab.getAll().then(tabs => {
 			makeAnchor(tab);
 		}
 	});
+});
+
+brother.Storage.onChanged((key, newValue) => {
+	options[key] = newValue;
+});
+
+brother.Storage.get(options).then(results => {
+	options = results;
 });

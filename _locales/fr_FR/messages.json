@@ -4,5 +4,8 @@
 	},
 	"extensionDescription": {
 		"message": "Ouvre tout nouvel onglet à la suite du dernier onglet ouvert, activé ou déplacé."
+	},
+	"optionPinFromPinned": {
+		"message": "Créer des onglets épinglés quand l'onglet actif est épinglé"
 	}
 }

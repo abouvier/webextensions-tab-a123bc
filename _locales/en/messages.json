@@ -4,5 +4,8 @@
 	},
 	"extensionDescription": {
 		"message": "Opens every new tab after the last opened, activated or moved tab."
+	},
+	"optionPinFromPinned": {
+		"message": "Create pinned tabs when the active tab is pinned"
 	}
 }

@@ -1,6 +1,7 @@
 {
 	"globals": {
-		"brother": false
+		"brother": false,
+		"options": true
 	},
 	"env": {
 		"browser": true,
