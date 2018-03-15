@@ -15,8 +15,16 @@
 
 "use strict";
 
-/* exported options */
-
-var options = {
-	pinFromPinned: false
-};
+document.addEventListener("DOMContentLoaded", function() {
+	Object.keys(options).forEach(optionId => {
+		this.getElementById(optionId).addEventListener("change", function() {
+			brother.Storage.set(optionId, this.checked);
+		});
+	});
+	brother.Storage.get(options).then(options => {
+		Object.keys(options).forEach(optionId => {
+			this.getElementById(optionId).checked = options[optionId];
+		});
+	});
+	brother.I18n.translate(this);
+});

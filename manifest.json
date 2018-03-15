@@ -10,16 +10,10 @@
 		"96": "icon.svg"
 	},
 	"background": {
-		"scripts": [
-			"lib/Storage.js",
-			"lib/Tab.js",
-			"lib/Window.js",
-			"scripts/default.js",
-			"scripts/background.js"
-		]
+		"page": "pages/background.html"
 	},
 	"options_ui": {
-		"page": "pages/options.html",
+		"page": "pages/options_ui.html",
 		"browser_style": true
 	},
 	"permissions": [
